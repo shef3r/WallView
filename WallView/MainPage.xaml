@@ -1,0 +1,73 @@
+﻿<Page
+    x:Class="WallView.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WallView"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="AppTitleBar" Background="Transparent" Margin="25,0,0,0">
+            <!-- Width of the padding columns is set in LayoutMetricsChanged handler. -->
+            <!-- Using padding columns instead of Margin ensures that the background
+                 paints the area under the caption control buttons (for transparent buttons). -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0"/>
+                <ColumnDefinition/>
+                <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="Assets/StoreLogo.png" 
+                   Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Width="16" Height="16"
+                   Margin="8,0,0,0"/>
+            <TextBlock x:Name="AppTitleTextBlock"
+                       Text="WallView"
+                       Style="{StaticResource BodyTextBlockStyle}"
+                       Grid.Column="1"
+                       VerticalAlignment="Center"
+                       Margin="33,0,0,0"/>
+        </Grid>
+
+        <!-- This control has a higher z-order than AppTitleBar, 
+             so it receives user input. -->
+        <CommandBar
+                        HorizontalAlignment="Center" DefaultLabelPosition="Right"
+                        OverflowButtonVisibility="Collapsed">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Icon="OpenLocal" Label="Open image folder" x:Name="OpenFolder" Click="OpenFolder_Click"/>
+                <AppBarButton Icon="SetLockScreen" Click="AppBarButton_Click" x:Name="set" Label="Set image as wallpaper"/>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+
+        <Grid Grid.Row="1" Background="{StaticResource LayerFillColorDefaultBrush}" Padding="12">
+            <TextBlock x:Name="empty" Style="{StaticResource TitleTextBlockStyle}" Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center">Open a folder to get started.</TextBlock>
+            <Grid x:Name="panel" Visibility="Collapsed" CornerRadius="8">
+                <GridView x:Name="view">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid CornerRadius="8">
+                                <Image Source="{Binding Thumbnail}" Stretch="Uniform"/>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <controls:StaggeredPanel DesiredColumnWidth="180"
+                                             HorizontalAlignment="Stretch"
+                                             ColumnSpacing="5"
+                                             RowSpacing="5" />
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
